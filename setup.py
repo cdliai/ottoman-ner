@@ -41,7 +41,7 @@ setup(
     name="ottoman-ner",
     version=PACKAGE_VERSION,
     author="Fatih Burak Karagöz",
-    author_email="fatihburak@pm.me",
+    author_email="fatihburak@protonmail.com",
     description="Ottoman Turkish Named Entity Recognition toolkit",
     long_description=long_description,
     long_description_content_type="text/markdown",
