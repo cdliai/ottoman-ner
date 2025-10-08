@@ -14,13 +14,13 @@ Ottoman NER is a specialized Python package for **Named Entity Recognition (NER)
 
 ### Key Features
 
-- 🎯 **Focused NER Solution**: Dedicated solely to Ottoman Turkish named entity recognition
-- 🚀 **Simple API**: Single class interface for all NER operations
-- ⚙️ **Easy Training**: Train custom models with JSON configuration
-- 📊 **Built-in Evaluation**: Comprehensive evaluation metrics with seqeval
-- 🔮 **Fast Prediction**: Real-time entity recognition
-- 🛠️ **CLI Interface**: Command-line tools for all operations
-- 📦 **PyPI Ready**: Easy installation via pip
+- **Focused NER Solution**: Dedicated solely to Ottoman Turkish named entity recognition
+- **Simple API**: Single class interface for all NER operations
+- **Easy Training**: Train custom models with JSON configuration
+- **Built-in Evaluation**: Comprehensive evaluation metrics with seqeval
+- **Fast Prediction**: Real-time entity recognition
+- **CLI Interface**: Command-line tools for all operations
+- **PyPI Ready**: Easy installation via pip
 
 ### Supported Entity Types
 
