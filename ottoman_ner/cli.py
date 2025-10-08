@@ -84,8 +84,7 @@ Examples:
     predict_parser.add_argument(
         "--model-path", "-m",
         type=str,
-        required=True,
-        help="Path to trained model"
+        help="Path to trained model (defaults to the published Hugging Face model)"
     )
     
     # Text input options (mutually exclusive)
@@ -131,7 +130,11 @@ def handle_train_command(args):
         results = ner.train_from_config(config)
         
         logger.info("✅ Training completed successfully!")
-        logger.info(f"📊 Final F1 Score: {results.get('eval_f1', 'N/A'):.4f}")
+        final_f1 = results.get('eval_f1')
+        if isinstance(final_f1, (int, float)):
+            logger.info(f"📊 Final F1 Score: {final_f1:.4f}")
+        else:
+            logger.info(f"📊 Final F1 Score: {final_f1 if final_f1 is not None else 'N/A'}")
         
         return 0
         
@@ -171,13 +174,13 @@ def handle_eval_command(args):
 
 def handle_predict_command(args):
     """Handle prediction command."""
-    logger.info(f"🔮 Loading model: {args.model_path}")
-    
     try:
         # Initialize Ottoman NER
         ner = OttomanNER()
         
         # Load model
+        target_model = args.model_path or ner.default_model_path
+        logger.info(f"🔮 Loading model: {target_model}")
         ner.load_model(args.model_path)
         
         # Get texts to process

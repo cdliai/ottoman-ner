@@ -17,6 +17,7 @@ Ottoman NER is a specialized Python package for **Named Entity Recognition (NER)
 - **Focused NER Solution**: Dedicated solely to Ottoman Turkish named entity recognition
 - **Simple API**: Single class interface for all NER operations
 - **Easy Training**: Train custom models with JSON configuration
+- **Pretrained Weights**: Official model published on Hugging Face (`fatihburakkaragoz/ottoman-ner-latin`)
 - **Built-in Evaluation**: Comprehensive evaluation metrics with seqeval
 - **Fast Prediction**: Real-time entity recognition
 - **CLI Interface**: Command-line tools for all operations
@@ -39,6 +40,8 @@ Ottoman NER is a specialized Python package for **Named Entity Recognition (NER)
 pip install ottoman-ner
 ```
 
+The `load_model()` call defaults to the official Hugging Face release. Pass a local directory or another Hub repository name to use custom weights.
+
 ### From Source
 
 ```bash
@@ -53,6 +56,8 @@ pip install -e .[dev]
 pip install -e .[full]
 ```
 
+> Tip: Include `"labels": ["O", "B-PER", ...]` under `model` in the configuration if you want to control the exact label order used during training.
+
 ---
 
 ## Quick Start
@@ -65,8 +70,8 @@ from ottoman_ner import OttomanNER
 # Initialize the NER system
 ner = OttomanNER()
 
-# Load a pre-trained model
-ner.load_model("models_hub/ner/ottoman-ner-standard")
+# Load the published pre-trained model (downloads from Hugging Face Hub)
+ner.load_model()
 
 # Make predictions
 text = "Sultan Abdülhamid İstanbul'da yaşıyordu."
@@ -97,7 +102,7 @@ from ottoman_ner import OttomanNER
 # Initialize and evaluate
 ner = OttomanNER()
 results = ner.evaluate(
-    model_path="models_hub/ner/ottoman-ner-standard",
+    model_path="fatihburakkaragoz/ottoman-ner-latin",
     test_file="data/test.txt"
 )
 
@@ -126,21 +131,23 @@ ottoman-ner --verbose train --config configs/training.json
 
 ```bash
 # Evaluate a trained model
-ottoman-ner eval --model-path models_hub/ner/ottoman-ner-standard --test-file data/test.txt
+ottoman-ner eval --model-path fatihburakkaragoz/ottoman-ner-latin --test-file data/test.txt
 
 # Save evaluation results
-ottoman-ner eval --model-path models_hub/ner/ottoman-ner-standard --test-file data/test.txt --output-dir results/
+ottoman-ner eval --model-path fatihburakkaragoz/ottoman-ner-latin --test-file data/test.txt --output-dir results/
 ```
 
 ### Prediction
 
 ```bash
 # Predict on single text
-ottoman-ner predict --model-path models_hub/ner/ottoman-ner-standard --text "Sultan Abdülhamid İstanbul'da yaşıyordu"
+ottoman-ner predict --text "Sultan Abdülhamid İstanbul'da yaşıyordu"
 
 # Predict on file
-ottoman-ner predict --model-path models_hub/ner/ottoman-ner-standard --input-file input.txt --output-file predictions.json
+ottoman-ner predict --input-file input.txt --output-file predictions.json
 ```
+
+If `--model-path` is omitted, the CLI downloads and caches the published Hugging Face model on first use.
 
 ---
 
@@ -168,7 +175,7 @@ Create a training configuration file in JSON format:
     "num_train_epochs": 3,
     "per_device_train_batch_size": 4,
     "learning_rate": 2e-5,
-    "eval_strategy": "steps",
+    "evaluation_strategy": "steps",
     "eval_steps": 100,
     "save_steps": 100,
     "load_best_model_at_end": true,
