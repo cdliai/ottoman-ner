@@ -83,7 +83,7 @@ class OttomanNER:
                 self.id2label = {int(k): v for k, v in mappings['id2label'].items()}
                 self.label2id = mappings['label2id']
         
-        logger.info(f"Model loaded from {model_identifier}")
+        logger.info(f"✅ Model loaded from {model_identifier}")
     
     def predict(self, text: str) -> List[Dict[str, Any]]:
         """Make predictions on a single text."""
@@ -376,12 +376,12 @@ class OttomanNER:
         # Get final evaluation results
         eval_results = trainer.evaluate()
         
-        logger.info("Training completed!")
+        logger.info("✅ Training completed!")
         return eval_results
     
     def evaluate(self, model_path: str, test_file: str, output_dir: Optional[str] = None) -> Dict[str, float]:
         """Evaluate a trained model."""
-        logger.info("Starting evaluation...")
+        logger.info("📊 Starting evaluation...")
         
         # Load model
         self.load_model(model_path)
@@ -435,5 +435,5 @@ class OttomanNER:
             with open(output_path / "detailed_report.json", 'w', encoding='utf-8') as f:
                 json.dump(report, f, ensure_ascii=False, indent=2)
         
-        logger.info("Evaluation completed!")
+        logger.info("✅ Evaluation completed!")
         return results
