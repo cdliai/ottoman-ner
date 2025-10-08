@@ -40,8 +40,6 @@ Ottoman NER is a specialized Python package for **Named Entity Recognition (NER)
 pip install ottoman-ner
 ```
 
-The `load_model()` call defaults to the official Hugging Face release. Pass a local directory or another Hub repository name to use custom weights.
-
 ### From Source
 
 ```bash
@@ -81,6 +79,8 @@ for entity in entities:
     print(f"{entity['text']} -> {entity['label']} ({entity['confidence']:.2f})")
 ```
 
+The `load_model()` call defaults to the official Hugging Face release. Pass a local directory or another Hub repository name to use custom weights.
+
 ### 2. Training Custom Models
 
 ```python
@@ -110,6 +110,22 @@ print(f"F1 Score: {results['overall_f1']:.4f}")
 print(f"Precision: {results['overall_precision']:.4f}")
 print(f"Recall: {results['overall_recall']:.4f}")
 ```
+
+### 4. Hugging Face Pipeline
+
+```python
+from transformers import pipeline
+
+pipe = pipeline(
+    task="token-classification",
+    model="fatihburakkaragoz/ottoman-ner-latin",
+    aggregation_strategy="simple"
+)
+
+pipe("Sultan Abdülhamid İstanbul'da yaşıyordu.")
+```
+
+> Tip: Include `"labels": ["O", "B-PER", ...]` under `model` in the configuration if you want to control the exact label order used during training.
 
 ---
 
