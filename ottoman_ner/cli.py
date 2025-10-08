@@ -181,7 +181,7 @@ def handle_predict_command(args):
         # Load model
         target_model = args.model_path or ner.default_model_path
         logger.info(f"🔮 Loading model: {target_model}")
-        ner.load_model(args.model_path)
+        ner.load_model(target_model)
         
         # Get texts to process
         if args.text:
