@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ottoman-ner"
-version = "2.0.1"
+dynamic = ["version"]
 description = "Ottoman Turkish Named Entity Recognition toolkit"
 readme = "README.md"
 license = {text = "MIT"}
@@ -89,6 +89,9 @@ include = ["ottoman_ner*"]
 [tool.setuptools.package-data]
 ottoman_ner = ["py.typed"]
 
+[tool.setuptools.dynamic]
+version = {attr = "ottoman_ner._version.__version__"}
+
 [tool.black]
 line-length = 88
 target-version = ['py38']
@@ -102,4 +105,4 @@ multi_line_output = 3
 python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = true 
+disallow_untyped_defs = true

@@ -3,8 +3,14 @@
 Setup script for Ottoman NER package
 """
 
-from setuptools import setup, find_packages
 from pathlib import Path
+from setuptools import find_packages, setup
+
+# Load package version from single source of truth
+version_path = Path(__file__).parent / "ottoman_ner" / "_version.py"
+version_ns = {}
+exec(version_path.read_text(encoding="utf-8"), version_ns)
+PACKAGE_VERSION = version_ns["__version__"]
 
 # Read README
 readme_path = Path(__file__).parent / "README.md"
@@ -33,9 +39,9 @@ else:
 
 setup(
     name="ottoman-ner",
-    version="2.0.0",
+    version=PACKAGE_VERSION,
     author="Fatih Burak Karagöz",
-    author_email="fatihburak@pm.me",
+    author_email="fatihburak@protonmail.com",
     description="Ottoman Turkish Named Entity Recognition toolkit",
     long_description=long_description,
     long_description_content_type="text/markdown",
