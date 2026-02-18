@@ -113,16 +113,20 @@ def handle_train_command(args):
     """Handle training command."""
     logger.info(f"🚀 Starting training with config: {args.config}")
     
+    # Load configuration
+    config_path = Path(args.config)
+    if not config_path.exists():
+        logger.error(f"❌ Configuration file not found: {args.config}")
+        return 1
+    
     try:
-        # Load configuration
-        config_path = Path(args.config)
-        if not config_path.exists():
-            logger.error(f"❌ Configuration file not found: {args.config}")
-            return 1
-            
         with open(config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
-        
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ Invalid JSON in config file: {e}")
+        return 1
+    
+    try:
         # Initialize Ottoman NER
         ner = OttomanNER()
         
@@ -138,8 +142,11 @@ def handle_train_command(args):
         
         return 0
         
+    except (ValueError, TypeError, FileNotFoundError) as e:
+        logger.error(f"❌ Training failed: {e}")
+        return 1
     except Exception as e:
-        logger.error(f"❌ Training failed: {str(e)}")
+        logger.error(f"❌ Training failed with unexpected error: {e}")
         return 1
 
 
@@ -167,13 +174,34 @@ def handle_eval_command(args):
         
         return 0
         
+    except FileNotFoundError as e:
+        logger.error(f"❌ File not found: {e}")
+        return 1
+    except (ValueError, TypeError) as e:
+        logger.error(f"❌ Evaluation failed: {e}")
+        return 1
     except Exception as e:
-        logger.error(f"❌ Evaluation failed: {str(e)}")
+        logger.error(f"❌ Evaluation failed with unexpected error: {e}")
         return 1
 
 
 def handle_predict_command(args):
     """Handle prediction command."""
+    # Get texts to process first (before model loading)
+    if args.text:
+        texts = [args.text]
+    else:
+        # Read from file
+        input_path = Path(args.input_file)
+        if not input_path.exists():
+            logger.error(f"❌ Input file not found: {args.input_file}")
+            return 1
+        try:
+            texts = input_path.read_text(encoding='utf-8').strip().split('\n')
+        except IOError as e:
+            logger.error(f"❌ Cannot read input file: {e}")
+            return 1
+    
     try:
         # Initialize Ottoman NER
         ner = OttomanNER()
@@ -182,17 +210,6 @@ def handle_predict_command(args):
         target_model = args.model_path or ner.default_model_path
         logger.info(f"🔮 Loading model: {target_model}")
         ner.load_model(target_model)
-        
-        # Get texts to process
-        if args.text:
-            texts = [args.text]
-        else:
-            # Read from file
-            input_path = Path(args.input_file)
-            if not input_path.exists():
-                logger.error(f"❌ Input file not found: {args.input_file}")
-                return 1
-            texts = input_path.read_text(encoding='utf-8').strip().split('\n')
         
         # Make predictions
         logger.info("🔍 Making predictions...")
@@ -227,8 +244,14 @@ def handle_predict_command(args):
         logger.info("✅ Prediction completed!")
         return 0
         
+    except FileNotFoundError as e:
+        logger.error(f"❌ Model or file not found: {e}")
+        return 1
+    except (ValueError, TypeError) as e:
+        logger.error(f"❌ Prediction failed: {e}")
+        return 1
     except Exception as e:
-        logger.error(f"❌ Prediction failed: {str(e)}")
+        logger.error(f"❌ Prediction failed with unexpected error: {e}")
         return 1
 
 
