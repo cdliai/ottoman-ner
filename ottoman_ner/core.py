@@ -259,8 +259,10 @@ class OttomanNER:
             
             labels.append(label_ids)
         
-        tokenized_inputs["labels"] = labels
-        return tokenized_inputs
+        # Create a copy to avoid modifying the original tokenizer output
+        result = dict(tokenized_inputs)
+        result["labels"] = labels
+        return result
     
     def compute_metrics(self, eval_pred):
         """Compute evaluation metrics."""
