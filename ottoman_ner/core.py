@@ -190,6 +190,12 @@ class OttomanNER:
     
     def load_conll_data(self, file_path: str) -> Dataset:
         """Load CoNLL format data."""
+        path = Path(file_path)
+        if not path.exists():
+            raise FileNotFoundError(f"CoNLL data file not found: {file_path}")
+        if not path.is_file():
+            raise ValueError(f"Path is not a file: {file_path}")
+        
         sentences = []
         labels = []
         
