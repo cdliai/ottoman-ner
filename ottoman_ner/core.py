@@ -279,6 +279,11 @@ class OttomanNER:
             for prediction, label in zip(predictions, labels)
         ]
         
+        # Check if we have any valid predictions
+        if not true_labels or all(len(seq) == 0 for seq in true_labels):
+            logger.warning("No valid labels found for metric computation")
+            return {"precision": 0.0, "recall": 0.0, "f1": 0.0}
+        
         results = {
             "precision": precision_score(true_labels, true_predictions),
             "recall": recall_score(true_labels, true_predictions),
