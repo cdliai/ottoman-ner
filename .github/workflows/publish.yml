@@ -25,6 +25,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e .[dev]
     
+    - name: Run tests
+      run: |
+        # Run the full test suite with coverage
+        pytest -v --cov=ottoman_ner --cov-report=xml --cov-report=term
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+        
     - name: Test package installation
       run: |
         # Test that the package can be imported

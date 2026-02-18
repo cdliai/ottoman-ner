@@ -41,7 +41,28 @@ pip install -e .[dev]
 - Keep functions focused and small
 
 ### Testing
+
+We use `pytest` for unit testing. All new features and bug fixes should include tests.
+
 ```bash
+# Run all tests
+pytest
+
+# Run tests with coverage report
+pytest --cov=ottoman_ner --cov-report=term-missing
+
+# Run tests with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_core.py
+
+# Run specific test
+pytest tests/test_core.py::TestOttomanNERInit::test_default_initialization
+
+# Run tests excluding slow tests
+pytest -m "not slow"
+
 # Test the CLI
 ottoman-ner --help
 
@@ -51,6 +72,15 @@ python -c "from ottoman_ner import OttomanNER; print('Import successful')"
 # Test package installation
 pip install -e .
 ```
+
+#### Writing Tests
+
+- Place tests in the `tests/` directory
+- Name test files with `test_` prefix (e.g., `test_core.py`)
+- Use descriptive test class and function names
+- Mock external dependencies (e.g., model loading, API calls)
+- Include tests for both success and error cases
+- Aim for at least 80% code coverage
 
 ### Commit Guidelines
 - Use clear, descriptive commit messages
@@ -95,6 +125,12 @@ Add support for custom tokenizers
 
 3. **Test your changes**:
    ```bash
+   # Run the full test suite
+   pytest
+   
+   # Run with coverage to ensure no regression
+   pytest --cov=ottoman_ner --cov-fail-under=80
+   
    # Test the CLI
    ottoman-ner --help
    
