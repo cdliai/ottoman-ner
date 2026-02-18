@@ -289,9 +289,18 @@ class OttomanNER:
         """Train a model from configuration."""
         logger.info("🚂 Starting training...")
         
+        # Validate configuration
+        if not isinstance(config, dict):
+            raise TypeError(f"config must be a dictionary, got {type(config).__name__}")
+        
+        data_config = config.get("data", {})
+        if "train_file" not in data_config:
+            raise ValueError("Missing required config key: data.train_file")
+        if "dev_file" not in data_config:
+            raise ValueError("Missing required config key: data.dev_file")
+        
         # Extract configuration
         model_config = config.get("model", {})
-        data_config = config.get("data", {})
         training_config = config.get("training", {})
         
         # Initialize tokenizer and model
