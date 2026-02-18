@@ -87,6 +87,9 @@ class OttomanNER:
     
     def predict(self, text: str) -> List[Dict[str, Any]]:
         """Make predictions on a single text."""
+        if not isinstance(text, str):
+            raise TypeError(f"text must be a string, got {type(text).__name__}")
+        
         if not self.model or not self.tokenizer:
             raise ValueError("Model not loaded. Call load_model() first.")
         
